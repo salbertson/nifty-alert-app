@@ -17,10 +17,12 @@ ActiveRecord::Schema.define(version: 20150212004901) do
   enable_extension "plpgsql"
 
   create_table "alerts", force: true do |t|
-    t.string  "description"
-    t.string  "recipients",     default: [], array: true
-    t.integer "current_number"
-    t.integer "threshold"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "description"
+    t.string   "recipient"
+    t.integer  "current_number"
+    t.integer  "threshold"
   end
 
   create_table "delayed_jobs", force: true do |t|
