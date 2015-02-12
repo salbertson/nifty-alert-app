@@ -10,11 +10,13 @@ class AlertsController < ApplicationController
         threshold: params[:threshold]
       )
 
-      if no_recent_alert_for(recipient) &&
-        recipient.include?("slack.com/services/hooks")
-        Rails.logger message
-        Typhoeus.post(recipient, body: message)
-      end
+      Typhoeus.post(recipient, body: message)
+
+      # if no_recent_alert_for(recipient) &&
+      #   recipient.include?("slack.com/services/hooks")
+      #   Rails.logger message
+      #   Typhoeus.post(recipient, body: message)
+      # end
     end
 
     head 201
