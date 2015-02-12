@@ -3,20 +3,17 @@ class AlertsController < ApplicationController
 
   def create
     recipients.each do |recipient|
+      if no_recent_alert_for(recipient) &&
+        recipient.include?("slack.com/services/hooks")
+        Typhoeus.post(recipient, body: message)
+      end
+
       Alert.create!(
         description: params[:description],
         recipient: recipient,
         current_number: params[:current_number],
         threshold: params[:threshold]
       )
-
-      Typhoeus.post(recipient, body: message)
-
-      # if no_recent_alert_for(recipient) &&
-      #   recipient.include?("slack.com/services/hooks")
-      #   Rails.logger message
-      #   Typhoeus.post(recipient, body: message)
-      # end
     end
 
     head 201
@@ -40,7 +37,7 @@ class AlertsController < ApplicationController
   def no_recent_alert_for(recipient)
     recent_alert_count = Alert.
       where(description: params[:description], recipient: recipient).
-      where("created_at < ?", 15.minutes.ago).
+      where("created_at > ?", 15.minutes.ago).
       count
     recent_alert_count == 0
   end
