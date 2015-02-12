@@ -11,10 +11,17 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150212002213) do
+ActiveRecord::Schema.define(version: 20150212004901) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "alerts", force: true do |t|
+    t.string  "description"
+    t.string  "recipients",     default: [], array: true
+    t.integer "current_number"
+    t.integer "threshold"
+  end
 
   create_table "delayed_jobs", force: true do |t|
     t.integer  "priority",   default: 0, null: false
